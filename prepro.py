@@ -1,10 +1,10 @@
 #/usr/bin/python2
 # -*- coding: utf-8 -*-
 
-'''
+"""
 By kyubyong park. kbpark.linguist@gmail.com.
 https://www.github.com/kyubyong/tacotron
-'''
+"""
 
 import codecs
 import csv
@@ -15,27 +15,26 @@ from hyperparams import Hyperparams as hp
 import numpy as np
 
 def store_vocab(idx2char):
-    writer = csv.writer(codecs.open(hp.vocab_file, 'w', 'utf-8'))
+    writer = csv.writer(codecs.open(hp.vocab_file, "w", "utf-8"))
     for idx in idx2char:
-        writer.writerow([idx, idx2char[idx].encode('unicode-escape')])
-
+        writer.writerow([idx, idx2char[idx].encode("unicode-escape")])
 
 def learn_vocab():
-    reader = csv.reader(codecs.open(hp.text_file, 'r', 'utf-8'))
+    reader = csv.reader(codecs.open(hp.text_file, "r", "utf-8"))
     vocab = set()
     for sound_fname, text in reader:
-        vocab = vocab.union(set(list(text.decode('unicode-escape'))))
+        vocab = vocab.union(set(list(text.decode("unicode-escape"))))
     char2idx = {char:idx for idx, char in enumerate(vocab)}
     idx2char = {idx:char for idx, char in enumerate(vocab)}
     return char2idx, idx2char
 
 def load_vocab():
-    reader = csv.reader(codecs.open(hp.vocab_file, 'r', 'utf-8'))
+    reader = csv.reader(codecs.open(hp.vocab_file, "r", "utf-8"))
     char2idx = {}
     idx2char = {}
     for idx, char in reader:
-        char2idx[char] = idx
-        idx2char[idx] = char
+        char2idx[char.decode("unicode-escape")] = idx
+        idx2char[idx] = char.decode("unicode-escape")
     return char2idx, idx2char
 
 def create_train_data():
@@ -43,10 +42,10 @@ def create_train_data():
     char2idx, idx2char = load_vocab()
 
     texts, sound_files = [], []
-    reader = csv.reader(codecs.open(hp.text_file, 'rb', 'utf-8'))
+    reader = csv.reader(codecs.open(hp.text_file, "rb", "utf-8"))
     for sound_fname, text in reader:
         sound_file = hp.sound_fpath + "/" + sound_fname + ".wav"
-        text = text.decode('unicode-escape')
+        text = text.decode("unicode-escape")
 
         if hp.min_len <= len(text) <= hp.max_len:
             texts.append(np.array([char2idx[char] for char in text if char in char2idx], np.int32).tostring())
@@ -56,20 +55,11 @@ def create_train_data():
 
 def load_train_data():
     """We train on the whole data but the last num_samples."""
-    texts, sound_files = create_train_data()
-    if hp.sanity_check: # We use a single mini-batch for training to overfit it.
-        texts, sound_files = texts[:hp.batch_size]*1000, sound_files[:hp.batch_size]*1000
-    else:
-        texts, sound_files = texts[:-hp.num_samples], sound_files[:-hp.num_samples]
-    return texts, sound_files
+    return create_train_data()
 
 def load_eval_data():
     """We evaluate on the last num_samples."""
     texts, _ = create_train_data()
-    if hp.sanity_check: # We generate samples for the same texts as the ones we've used for training.
-        texts = texts[:hp.batch_size]
-    else:
-        texts = texts[-hp.num_samples:]
 
     X = np.zeros(shape=[len(texts), hp.max_len], dtype=np.int32)
     for i, text in enumerate(texts):
