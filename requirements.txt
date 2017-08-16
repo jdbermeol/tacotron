@@ -1,0 +1,7 @@
+tensorflow=1.2.0
+librosa
+tqdm
+ipython
+jupyter
+matplotlib
+requests
