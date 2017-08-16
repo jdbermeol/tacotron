@@ -4,6 +4,10 @@ data/
 corpora/
 logdir/
 samples/
+logdir_s/
+samples_s/
 *.pyc
 _*
 *~
+.DS_Store
+dataset
