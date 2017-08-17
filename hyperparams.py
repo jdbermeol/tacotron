@@ -13,7 +13,6 @@ class Hyperparams:
     sound_fpath = "dataset"
     vocab_file = "dataset/vocab.csv"
     max_len = 30 # maximum length of text
-    min_len = 20 # minimum length of text
 
     # signal processing
     sr = 22050 # Sampling rate. Paper => 24000

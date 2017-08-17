@@ -47,7 +47,7 @@ def create_train_data():
         sound_file = hp.sound_fpath + "/" + sound_fname + ".wav"
         text = text.decode("unicode-escape")
 
-        if hp.min_len <= len(text) <= hp.max_len:
+        if len(text) <= hp.max_len:
             texts.append(np.array([char2idx[char] for char in text if char in char2idx], np.int32).tostring())
             sound_files.append(sound_file)
 
