@@ -33,8 +33,8 @@ def load_vocab():
     char2idx = {}
     idx2char = {}
     for idx, char in reader:
-        char2idx[char.decode("unicode-escape")] = idx
-        idx2char[idx] = char.decode("unicode-escape")
+        char2idx[char.decode("unicode-escape")] = int(idx)
+        idx2char[int(idx)] = char.decode("unicode-escape")
     return char2idx, idx2char
 
 def create_train_data():
