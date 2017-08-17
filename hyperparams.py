@@ -9,13 +9,13 @@ class Hyperparams:
     """Hyper parameters"""
 
     # data
-    text_file = "dataset/subsample.csv"
+    text_file = "dataset/text_with_less_than_200_chars.csv"
     sound_fpath = "dataset"
     vocab_file = "dataset/vocab.csv"
-    max_len = 30 # maximum length of text
+    max_len = 200 # maximum length of text
 
     # signal processing
-    sr = 22050 # Sampling rate. Paper => 24000
+    sr = 24000 # Sampling rate. Paper => 24000
     n_fft = 2048 # fft points (samples)
     frame_shift = 0.0125 # seconds
     frame_length = 0.05 # seconds
@@ -35,12 +35,12 @@ class Hyperparams:
     norm_type = "ins"  # a normalizer function. value: bn, ln, ins, or None
 
     # training scheme
-    lr = 0.0005 # Paper => Exponential decay
+    lr = 0.001 # Paper => Exponential decay
     logdir = "logdir"
     outputdir = "samples"
     batch_size = 32
-    num_epochs = 400 # Paper => 2M global steps!
-    loss_type = "l2" # Or you can test "l2"
+    num_epochs = 600 # Paper => 2M global steps!
+    loss_type = "l1" # Or you can test "l2"
     num_samples = 32
 
     # etc
